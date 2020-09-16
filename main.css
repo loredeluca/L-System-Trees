@@ -1,0 +1,57 @@
+h3 {
+    color: dodgerblue;
+}
+
+#scene-container {
+    position: absolute;
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+
+.normal-button {
+    width: 100%;
+}
+
+.content {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.dropdown-menu-left {
+    background-color: black;
+}
+
+.rendering-button {
+    position: relative;
+    float: right;
+    top: 1em;
+}
+
+.gui-container {
+    position: absolute;
+    background-color: transparent;
+    top: 1em;
+    right: 1em;
+    width: 16.5em;
+    z-index: 1;
+}
+
+.index {
+    position: absolute;
+    background-color: transparent;
+    bottom: 1em;
+    right: 1em;
+    width: 16.5em;
+    z-index: 1;
+}
+
+.custom-checkbox {
+    background-color: transparent;
+    width: 7em;
+}
+
+#text-index {
+    color: black;
+    font-size: smaller;
+}
