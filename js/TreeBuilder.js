@@ -1,27 +1,11 @@
 var tmp = [];
 var first;
-var F1;
-var f1;
-var X1;
-var x1;
 
-function solveRule(axiom, iteration, A, B){//, f, x) {
+function solveRule(axiom, iteration, A, B){
     var finalRule = axiom.split('');
-    //var F = f.split('');
-    //var X = x.split('');
-    //finalRule.push(ax);
     while (iteration > 0){
         var i =0;
         while (i<finalRule.length){
-            /*if (finalRule[i] === "F"){
-                i++;
-                continue;
-            }
-            if (finalRule[i] === "X"){
-                i++;
-                continue;
-            }*/
-        //for (let i = 0; i < finalRule.length; i++) {
             if (finalRule[i] === "F") {
                 for (var u=0; u < i; u++){
                     first = finalRule.shift();
@@ -35,7 +19,6 @@ function solveRule(axiom, iteration, A, B){//, f, x) {
                     finalRule.unshift(tmp[z]);
                 tmp = [];
                 i+=F.length;
-                //iteration--;
                 continue;
             }
             if (finalRule[i] === 'X') {
@@ -51,96 +34,35 @@ function solveRule(axiom, iteration, A, B){//, f, x) {
                     finalRule.unshift(tmp[c]);
                 tmp = [];
                 i+=X.length;
-                //finalRule.splice(i,1, X);
                 continue;
             }
-            if (finalRule[i] === 'A'){
-                //solveRule(A, iter, A, B);
-                for (var y=0; y < i; y++){
-                    first = finalRule.shift();
-                    tmp.unshift(first);
-                }
-                finalRule.shift();
-                //F = stocasticF();
-                ruleA = A.split('');
-                for (var j=ruleA.length-1; j> -1; j--)
-                    finalRule.unshift(ruleA[j]);
-                for (var m=0; m<tmp.length; m++)
-                    finalRule.unshift(tmp[m]);
-                tmp = [];
-                i+=ruleA.length;
-                //iteration--;
-                continue;
-            }
-            if (finalRule[i] === 'B'){
-                //solveRule(B, iter, A, B);
-                for (var k=0; k < i; k++){
-                    first = finalRule.shift();
-                    tmp.unshift(first);
-                }
-                finalRule.shift();
-                //F = stocasticF();
-                ruleB = B.split('');
-                for (var l=ruleB.length-1; l> -1; l--)
-                    finalRule.unshift(ruleB[l]);
-                for (var n=0; n<tmp.length; n++)
-                    finalRule.unshift(tmp[n]);
-                tmp = [];
-                i+=ruleB.length;
-                //iteration--;
-                continue;
-            }
-            if (finalRule[i] === '+') {
+            if (finalRule[i] === '+' || finalRule[i] === '-') {
                 i++;
                 continue;
             }
-            if (finalRule[i] === '-') {
+            if (finalRule[i] === 'v' || finalRule[i] === '^') {
                 i++;
                 continue;
             }
-            if (finalRule[i] === 'v') {
+            if (finalRule[i] === '>' || finalRule[i] === '<') {
                 i++;
                 continue;
             }
-            if (finalRule[i] === '^') {
-                i++;
-                continue;
-            }
-            if (finalRule[i] === '>') {
-                i++;
-                continue;
-            }
-            if (finalRule[i] === '<') {
-                i++;
-                continue;
-            }
-            if (finalRule[i] === '[') {
-                i++;
-                continue;
-            }
-            if (finalRule[i] === ']') {
+            if (finalRule[i] === '[' || finalRule[i] === ']') {
                 i++;
             }
         }
         iteration--;
     }
-    //elimino le A o le B dopo le x iterazioni, per poter leggere correttamente
-    for (var h=0; h<finalRule.length; h++){
-        if (finalRule[h]==='A' || finalRule[h]==='B'){
-            finalRule.splice(h, 1);
-            h--;
-        }
-    }
     return finalRule.join('');
 }
 
-function NewTreeBuilder(string, treeParameters){//startingPosition, degreeValueAngle, branchRadius) {
+function treeBuilder(string, treeParameters){
     let state = {
-        dd : treeParameters.degreeValueAngle,
+        degValAng : treeParameters.degreeValueAngle,
         bRadius : treeParameters.branchRadius,
         bLength : treeParameters.branchLength,
         bReduction : treeParameters.radiusReductionFactor,
-        bMinRadius : 0.05,
         position : treeParameters.startingPosition,
         angleX : 0,
         angleY : 0,
@@ -152,10 +74,10 @@ function NewTreeBuilder(string, treeParameters){//startingPosition, degreeValueA
 
     for(let i = 0; i < string.length; i++) {
         if(string.charAt(i) === "F") {
-            tree.add(buildRamo(state, textureLoader));
+            tree.add(buildBranch(state, textureLoader));
         }
         if(string.charAt(i) === "X") {
-            tree.add(buildFoglia(state, textureLoader ));
+            tree.add(buildLeaf(state));
         }
         if(string.charAt(i) === "+") {
             state.angleX +=1;
@@ -177,7 +99,7 @@ function NewTreeBuilder(string, treeParameters){//startingPosition, degreeValueA
         }
         if(string.charAt(i) === "[") {
             stateStack.push( cloneState(state) );
-            state.bRadius = (state.bRadius - state.bReduction) > state.bMinRadius ? (state.bRadius - state.bReduction) : state.bRadius;
+            state.bRadius = (state.bRadius - state.bReduction) > 0.10 ? (state.bRadius - state.bReduction) : state.bRadius;
         }
         if(string.charAt(i) === "]") {
             state = cloneState( stateStack.pop() );
@@ -187,19 +109,19 @@ function NewTreeBuilder(string, treeParameters){//startingPosition, degreeValueA
     return tree;
 }
 
-function buildRamo(state, textureLoader) {
+function buildBranch(state, textureLoader) {
     var branchGeometry = new THREE.CylinderGeometry( state.bRadius, state.bRadius, state.bLength, 12 );
-    var branchMaterial = new THREE.MeshBasicMaterial( {color: 'brown', map: textureLoader.load( "texture/branch.jpg" )} );
-    //state.bRadius = state.bRadius*(1-state.bReduction);
-    state.bRadius *= (1-state.bReduction);
-
+    var branchMaterial = new THREE.MeshBasicMaterial( { map: textureLoader.load("texture/bark.jpg")});
+    //var branchMaterial = new THREE.MeshBasicMaterial( { color: 0x1e1307 });
     var branch = new THREE.Mesh( branchGeometry, branchMaterial);
+
+    state.bRadius *= (1-state.bReduction);
 
     //calcolo attuale posizione del blocchetto
     var position = new THREE.Vector3( 0, state.bLength/2, 0);
-    state.angleX = state.angleX * ((state.dd*Math.PI)/180);
-    state.angleY = state.angleY * ((state.dd*Math.PI)/180);
-    state.angleZ = state.angleZ * ((state.dd*Math.PI)/180);
+    state.angleX = state.angleX * ((state.degValAng*Math.PI)/180);
+    state.angleY = state.angleY * ((state.degValAng*Math.PI)/180);
+    state.angleZ = state.angleZ * ((state.degValAng*Math.PI)/180);
 
     branch.rotation.set(state.angleX, state.angleY, state.angleZ);
 
@@ -213,56 +135,48 @@ function buildRamo(state, textureLoader) {
     state.position.add(position);
 
     branch.castShadow = true;
+    branch.receiveShadow = true;
     return branch;
 
 }
 
-function buildFoglia(state, textureLoader) {
-    let leafMaterial = new THREE.MeshBasicMaterial( {color: 'green', map: textureLoader.load( "texture/leaf1.jpg" )} );
+function buildLeaf(state) {
+    let leafMaterial = new THREE.MeshBasicMaterial( {color: 'green'});
 
     let x = 0, y = 0;
     let leafShape = new THREE.Shape();
-    /*leafShape.bezierCurveTo(x, y, x + 2, y, x, y);
-    leafShape.bezierCurveTo(x - 0.5, y, x - 0.5, y + 1.16, x - 0.5, y + 1.1);
-    leafShape.bezierCurveTo(x - 0.5, y + 1.83, x - 0.5, y + 2.56, x + 0.83, y + 4.16);
-    leafShape.bezierCurveTo(x + 2, y + 2.56, x + 1.66, y + 1.83, x + 1.66, y + 1.16);
-    leafShape.bezierCurveTo(x + 1.66, y + 1.16, x + 1.66, y, x + 0.66, y);
-    leafShape.bezierCurveTo(x + 1.16, y, x + 0.83, y + 0.83, x, y);*/
 
     leafShape.bezierCurveTo(x, y, x + 4, y, x, y);
     leafShape.bezierCurveTo(x - 3, y, x - 3, y + 7, x - 3, y + 7);
     leafShape.bezierCurveTo(x - 3, y + 11, x - 3, y + 15.4, x + 5, y + 25);
     leafShape.bezierCurveTo(x + 12, y + 15.4, x + 10, y + 11, x + 10, y + 7);
     leafShape.bezierCurveTo(x + 10, y + 7, x + 10, y, x + 4, y);
-    leafShape.bezierCurveTo(x + 7, y, x + 5, y + 5, x, y);
+    leafShape.bezierCurveTo(x + 7, y, x + 5, y , x, y);
+
+    //Forma foglia a cuore
+    /*leafShape.moveTo( x + 5, y + 1 );
+    leafShape.bezierCurveTo( x + 5, y + 1, x + 4, y, x, y );
+    leafShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+    leafShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 12.4, x + 5, y + 30 );
+    leafShape.bezierCurveTo( x + 12, y + 12.4, x + 16, y + 11, x + 16, y + 7 );
+    leafShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+    leafShape.bezierCurveTo( x + 7, y, x + 5, y + 1, x + 5, y + 1 );*/
 
     let curveGeometry = new THREE.ShapeGeometry(leafShape);
-
     let leafGeometry = new THREE.Geometry();
     leafGeometry.merge(curveGeometry);
-    //leafGeometry.matrixAutoUpdate  = false;
-    //da spessore alle foglie
-    var mesh_arr = new Array();
-    for(i = 0; i < 0.5 ; i += 0.01) {
-        mesh_arr[i] = curveGeometry.clone();
-        mesh_arr[i].translate(0, 0, i);
-        leafGeometry.merge( mesh_arr[i] );
+
+    var meshLeaf = new Array();
+    for(var g = 0; g < 0.5; g += 0.01) {
+        meshLeaf[g] = curveGeometry.clone();
+        meshLeaf[g].translate(0, 0, g);
+        leafGeometry.merge( meshLeaf[g] );
     }
-    //leafGeometry.rotateX((-10*Math.PI)/180);
-    //leafGeometry.rotateY((-90*Math.PI)/180);
-
     leafGeometry.translate(-3,-5,0);
-
-    /*let stemGeometry = new THREE.CylinderGeometry(0.2, 0.6, 32, 10);
-    let stemMesh = new THREE.Mesh(stemGeometry)*/
-
-    /*let leafTotalGeometry = new THREE.Geometry();
-    leafTotalGeometry.merge(stemMesh.geometry, stemMesh.matrix);
-    leafTotalGeometry.merge(leaf);*/
 
     var leaf = new THREE.Mesh( leafGeometry, leafMaterial );
     leaf.material.side=THREE.doubleSide;
-    //branch.castShadow = true;
+    leaf.castShadow = true;
 
     leaf.scale.x = 0.08;
     leaf.scale.y = 0.08;
@@ -274,54 +188,19 @@ function buildFoglia(state, textureLoader) {
     leaf.rotation.set(0,80,0);
 
     leaf.castShadow = true;
+    leaf.receiveShadow = true;
     return leaf;
 }
 
 function cloneState(state) {
     return {
-        dd : state.dd,
+        degValAng : state.degValAng,
         bRadius : state.bRadius,
         bLength : state.bLength,
         bReduction : state.bReduction,
-        bMinRadius : state.bMinRadius,
         position : new THREE.Vector3().copy(state.position),
         angleX : state.angleX,
         angleY : state.angleY,
         angleZ : state.angleZ
-    }
-}
-
-function stocasticF() {
-    //const f = Math.floor(Math.random() * 3);
-    const f = 0;
-    switch (f) {
-        case 0:
-            F1 = 'FF';
-            //F1 = 'F[+F]F[-F]F';
-            f1 = F1.split('');
-            return f1;
-        case 1:
-            F1 = 'F[+F]F';
-            f1 = F1.split('');
-            return f1;
-        case 2:
-            F1 = 'F[-F]F';
-            f1 = F1.split('');
-            return f1;
-    }
-}
-function stocasticX() {
-    //const xx = Math.floor(Math.random() * 2);
-    const xx = 0;
-    switch (xx) {
-        case 0:
-            X1 = 'F[+X][-X]FX';
-            //X1 = 'F-[[X]+X]+F[+FX]-X';
-            x1 = X1.split('');
-            return x1;
-        case 1:
-            X1 = 'F[+X]F[-X]+X';
-            x1 = X1.split('');
-            return x1;
     }
 }

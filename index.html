@@ -6,37 +6,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8" />
 
-        <link rel="icon" href="images/tree.ico" type="image/x-icon"> <!--modifica icona che appare su pagina web a sx-->
-        <link href="main.css" rel="stylesheet" type="text/css" /> <!--riferimento a file css che serve per definire lo stile del sito-->
-        
+        <link rel="icon" href="texture/tree.png" type="image/x-icon">
+        <link href="main.css" rel="stylesheet" type="text/css" />
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-        <!--il tag script contiene istruzioni di script o punta a un file di script esterno tramite l'attributo src-->
-        <!--Gli usi comuni di JavaScript sono la manipolazione delle immagini, la convalida dei moduli e le modifiche dinamiche del contenuto-->
         <script src="js/lib/three.js"></script>
         <script src="js/lib/OrbitControls.js"></script>
         <script src="js/lib/GLTFLoader.js"></script>
-        <!--usato per la GUI-->
         <script src="js/lib/dat.gui.js"></script>
 
     </head>
 
     <body>
-    <!-- Il <div> tag definisce una divisione o una sezione in un documento HTML e viene utilizzato come
-    contenitore per elementi HTML, a cui viene quindi applicato lo stile CSS o manipolato con JavaScript-->
-
         <div id="scene-container"></div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-        <!--<script src="js/utils.js"></script>
-        <script src="js/leafCreator.js"></script>
-        <script src="js/buttonsListener.js"></script>-->
         <script src="js/TreeBuilder.js"></script>
         <script src="js/GUI.js"></script>
+        <script src="js/defaultTree.js"></script>
         <script src="js/init.js"></script>
 
     </body>
