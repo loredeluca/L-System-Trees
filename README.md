@@ -7,7 +7,7 @@ The work was written in Javascript, using the Three.js framework, and the graphi
 
 
 ### How to install
-Download code and run `index.html` with a browser with local server to load textures. ( you can use [“Web Server for Chrome”](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb)]
+Download code and run `index.html` with a browser with local server to load textures (you can use [Web Server for Chrome](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb)).
 
 ### How to make it work
 Using the graphical user interface `dat.gui`, you can change the variables that allow to model your garden:
