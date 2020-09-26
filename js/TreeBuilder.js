@@ -58,6 +58,7 @@ function solveRule(axiom, iteration, A, B){
 }
 
 function treeBuilder(string, treeParameters){
+    //stato dell'albero
     let state = {
         degValAng : treeParameters.degreeValueAngle,
         bRadius : treeParameters.branchRadius,
@@ -71,13 +72,13 @@ function treeBuilder(string, treeParameters){
     let stateStack = [];
     let tree = new THREE.Object3D();
     let textureLoader = new THREE.TextureLoader();
-
+    //lettura della stringa
     for(let i = 0; i < string.length; i++) {
         if(string.charAt(i) === "F") {
             tree.add(buildBranch(state, textureLoader));
         }
         if(string.charAt(i) === "X") {
-            tree.add(buildLeaf(state));
+            tree.add(buildLeaf(tree, state));
         }
         if(string.charAt(i) === "+") {
             state.angleX +=1;
@@ -110,15 +111,16 @@ function treeBuilder(string, treeParameters){
 }
 
 function buildBranch(state, textureLoader) {
-    var branchGeometry = new THREE.CylinderGeometry( state.bRadius, state.bRadius, state.bLength, 12 );
-    var branchMaterial = new THREE.MeshBasicMaterial( { map: textureLoader.load("texture/bark.jpg")});
-    //var branchMaterial = new THREE.MeshBasicMaterial( { color: 0x1e1307 });
+    var branchGeometry = new THREE.CylinderGeometry(state.bRadius, state.bRadius, state.bLength, 12 );
+    var branchMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("texture/bark.jpg")});
+    //var branchMaterial = new THREE.MeshBasicMaterial({color: 0x2b1c0d});
     var branch = new THREE.Mesh( branchGeometry, branchMaterial);
 
     state.bRadius *= (1-state.bReduction);
 
-    //calcolo attuale posizione del blocchetto
+    //Trovo il top del cilindro corrente del ramo
     var position = new THREE.Vector3( 0, state.bLength/2, 0);
+    //Applico la rotazione
     state.angleX = state.angleX * ((state.degValAng*Math.PI)/180);
     state.angleY = state.angleY * ((state.degValAng*Math.PI)/180);
     state.angleZ = state.angleZ * ((state.degValAng*Math.PI)/180);
@@ -140,7 +142,7 @@ function buildBranch(state, textureLoader) {
 
 }
 
-function buildLeaf(state) {
+function buildLeaf(tree, state) {
     let leafMaterial = new THREE.MeshBasicMaterial( {color: 'green'});
 
     let x = 0, y = 0;
@@ -153,7 +155,7 @@ function buildLeaf(state) {
     leafShape.bezierCurveTo(x + 10, y + 7, x + 10, y, x + 4, y);
     leafShape.bezierCurveTo(x + 7, y, x + 5, y , x, y);
 
-    //Forma foglia a cuore
+    //Foglia a forma di cuore
     /*leafShape.moveTo( x + 5, y + 1 );
     leafShape.bezierCurveTo( x + 5, y + 1, x + 4, y, x, y );
     leafShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
@@ -166,11 +168,12 @@ function buildLeaf(state) {
     let leafGeometry = new THREE.Geometry();
     leafGeometry.merge(curveGeometry);
 
-    var meshLeaf = new Array();
+    //Spessore alle foglie
+    var fatLeaf = new Array();
     for(var g = 0; g < 0.5; g += 0.01) {
-        meshLeaf[g] = curveGeometry.clone();
-        meshLeaf[g].translate(0, 0, g);
-        leafGeometry.merge( meshLeaf[g] );
+        fatLeaf[g] = curveGeometry.clone();
+        fatLeaf[g].translate(0, 0, g);
+        leafGeometry.merge( fatLeaf[g] );
     }
     leafGeometry.translate(-3,-5,0);
 

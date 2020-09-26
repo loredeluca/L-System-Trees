@@ -97,18 +97,6 @@ function renderTree() {
             A = values[1];
             B = values[2];
             break;
-        case 'Plant5':
-            values = choosePlant('5');
-            axiom = values[0];
-            A = values[1];
-            B = values[2];
-            break;
-        case 'Plant6':
-            values = choosePlant('6');
-            axiom = values[0];
-            A = values[1];
-            B = values[2];
-            break;
         case 'StochasticPlant':
             const randomPlant = Math.floor(Math.random() * 2);
             switch (randomPlant){
