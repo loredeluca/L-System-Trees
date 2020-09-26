@@ -118,7 +118,7 @@ function buildBranch(state, textureLoader) {
 
     state.bRadius *= (1-state.bReduction);
 
-    //Trovo il top del cilindro corrente del ramo
+    //Identifico il top
     var position = new THREE.Vector3( 0, state.bLength/2, 0);
     //Applico la rotazione
     state.angleX = state.angleX * ((state.degValAng*Math.PI)/180);
@@ -128,12 +128,10 @@ function buildBranch(state, textureLoader) {
     branch.rotation.set(state.angleX, state.angleY, state.angleZ);
 
     //calcolo dove posizionare il ramo:
-    // applico a position la stessa rotazione del ramo e aggiorno il punto di top
     position.applyEuler(branch.rotation);
     state.position.add(position);
-    //posiziono il ramo
     branch.position.copy( state.position );
-    //aggiorno il nuovo top
+    //aggiorno position
     state.position.add(position);
 
     branch.castShadow = true;
