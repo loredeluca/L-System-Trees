@@ -12,7 +12,7 @@ Download code and run `index.html` with a browser with local server to load text
 ### How to make it work
 Using the graphical user interface `dat.gui`, you can change the variables that allow to model your garden:
 - In the first folder:
-	- Choose one of six different types of default plants or the _other_ option to generate a new plant
+	- Choose one of four different types of default plants, _stochasticPlant_ or the _other_ option to generate a new plant
 	- Select the 'stochastic' option to generate random trees
 	- Choose where to place the tree in the garden by changing the _posX_ and _posY_ parameters
 - In the second folder:
